@@ -16,7 +16,7 @@ namespace DataAccess.Concrete.InMemory
             _cars = cars;
             foreach (var car in _cars)
             {
-                Console.WriteLine("Id:{0} => {1} --- Günlük Fiyat: {2}",car.Id,car.Description,car.DailyPrice);
+                Console.WriteLine("Id:{0} => Açıklama: {1} --- Günlük Fiyat: {2}",car.Id,car.Description,car.DailyPrice);
             }
 
             return _cars;
@@ -25,7 +25,7 @@ namespace DataAccess.Concrete.InMemory
         public Car GetById(int id)
         {
             var result = _cars.Find(c => c.Id == id);
-            Console.WriteLine("Id:{0}=>{1} -*-*- Günlük Fiyat: {2}",result.Id,result.Description,result.DailyPrice);
+            Console.WriteLine("Id:{0}=> Açıklama: {1} -*-*- Günlük Fiyat: {2}",result.Id,result.Description,result.DailyPrice);
             return result;
         }
 
