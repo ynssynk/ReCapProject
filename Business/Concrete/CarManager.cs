@@ -15,9 +15,9 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetAll(List<Car> cars)
+        public List<Car> GetAll()
         {
-            return _carDal.GetAll(cars);
+            return _carDal.GetAll();
         }
 
         public Car GetById(int id)

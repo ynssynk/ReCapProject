@@ -10,23 +10,63 @@ namespace DataAccess.Concrete.InMemory
     {
         private List<Car> _cars;
 
-
-        public List<Car> GetAll(List<Car> cars)
+        public InMemoryDal()
         {
-            _cars = cars;
-            foreach (var car in _cars)
+            _cars = new List<Car>
             {
-                Console.WriteLine("Id:{0} => Açıklama: {1} --- Günlük Fiyat: {2}",car.Id,car.Description,car.DailyPrice);
-            }
+                new Car
+                {
+                    Id = 1,
+                    BrandId = 1,
+                    ColorId = 1,
+                    DailyPrice = 250,
+                    ModelYear = 2018,
+                    Description = "RENAULT CLIO AT 1.5 -Ekonomik araç"
+                },
+                new Car
+                {
+                    Id = 2,
+                    BrandId = 2,
+                    ColorId = 1,
+                    DailyPrice = 300,
+                    ModelYear = 2019,
+                    Description = "FORD FOCUS AT 1.5 -Orta sınıf araç"
+                },
+                new Car
+                {
+                    Id = 3,
+                    BrandId = 3,
+                    ColorId = 1,
+                    DailyPrice = 300,
+                    ModelYear = 2019,
+                    Description = "TOYOTA COROLLA HYBRID -Orta sınıf araç"
+                },
+                new Car
+                {
+                    Id = 4, BrandId = 3, ColorId = 1, DailyPrice = 350, ModelYear = 2020,
+                    Description = "BMW 320i -Üst snıf araç"
+                },
+                new Car {Id = 5, BrandId = 4, ColorId = 1, DailyPrice = 370, Description = "VOLVO S90 -Üst sınıf araç"},
+                new Car
+                {
+                    Id = 6,
+                    BrandId = 3,
+                    ColorId = 1,
+                    DailyPrice = 385,
+                    ModelYear = 2021,
+                    Description = "BMW 2 serisi -Üst snıf araç"
+                },
+            };
+        }
 
+        public List<Car> GetAll()
+        {
             return _cars;
         }
 
         public Car GetById(int id)
         {
-            var result = _cars.Find(c => c.Id == id);
-            Console.WriteLine("Id:{0}=> Açıklama: {1} -*-*- Günlük Fiyat: {2}",result.Id,result.Description,result.DailyPrice);
-            return result;
+            return _cars.FirstOrDefault(c => c.Id == id);
         }
 
         public void Add(Car car)
