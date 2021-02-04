@@ -40,7 +40,7 @@ namespace ConsoleUI
             GetAllList(carManager);
 
             Console.WriteLine("*********Tek bir kayıt göster*********");
-            carManager.GetById(2);
+            Console.WriteLine(carManager.GetById(2).Description);
 
         }
 
