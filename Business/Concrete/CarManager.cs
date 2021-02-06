@@ -20,27 +20,28 @@ namespace Business.Concrete
             return _carDal.GetAll();
         }
 
-        public Car GetById(int id)
+        public Car Get()
         {
-            return id <= 0 ? throw new Exception("Geçersiz bir değer girildi") : _carDal.GetById(id);
+            throw new NotImplementedException();
         }
+
 
         public void Add(Car car)
         {
-            if (car!=null)
+            if (car.DailyPrice>0)
             {
                 _carDal.Add(car);
             }
             else
             {
-                throw new NullReferenceException("Beklenilen değer girilmedi veya yanlış bir şey oldu");
+                throw new NullReferenceException("Yanlış değer girdiniz");
             }
         }
 
         public void Update(Car car)
         {
             
-            if (car != null && car.Id>0)
+            if (car != null)
             {
                 _carDal.Update(car);
             }
@@ -60,6 +61,18 @@ namespace Business.Concrete
             {
                 throw new Exception("Ters giden bir şeyler var !!! Tekrar kontrol et");
             }
+        }
+
+        public List<Car> GetCarsByBrandId(int brandId)
+        {
+            return _carDal.GetAll() == null ? throw new Exception("Listete hiç bu markadan araç yok ") : _carDal.GetAll(c => c.BrandId == brandId);
+        }
+
+        public List<Car> GetCarsByColorId(int colorId)
+        {
+            return _carDal.GetAll() == null
+                ? throw new Exception("Bu renk ait hiç araç yok")
+                : _carDal.GetAll(c => c.ColorId == colorId);
         }
     }
 }
