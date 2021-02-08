@@ -5,6 +5,8 @@ using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
+using Entities.DTOs;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace ConsoleUI
 {
@@ -12,25 +14,46 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-           
+            Car car1 = new Car
+            {
+                BrandId = 1,ColorId = 3,DailyPrice = 150,Description = "En uygun fiyat araçlar bizde",ModelYear = 2020
+            };
+            //Brand brand1 = new Brand {Id = 1002,Name = "Fiat"};
+            Color color1 = new Color {Name = "Mavi"};
             CarManager carManager = new CarManager(new EfCarDal());
-            
-            
-            //GetAllList(carManager);
-            Console.WriteLine("*******brandıd******");
-            GetCarsBrandId(carManager);
-            Console.WriteLine("****colorId*****");
-            GetCarsColordId(carManager);
-
+            BrandManager brandManager = new BrandManager(new EfBrandDal());
+            //brandManager.Update(brand1);
+            ColorManager colorManager = new ColorManager(new EfColorDal());
+            colorManager.Add(color1);
+            GetAllList(carManager);
+            Console.WriteLine("*****Markalar****");
+            GetAllBrands(brandManager);
+            Console.WriteLine("****Renkler*****");
+            GetAllColors(colorManager);
             
 
         }
 
+        private static void GetAllColors(ColorManager colorManager)
+        {
+            foreach (var color in colorManager.GetAll())
+            {
+                
+                Console.WriteLine("Id: {0} / Renk: {1}",color.Id,color.Name);
+            }
+        }
+        private static void GetAllBrands(BrandManager brandManager)
+        {
+            foreach (var brand in brandManager.GetAll())
+            {
+                Console.WriteLine("Id: {0} / Marka: {1}",brand.Id,brand.Name);
+            }
+        }
         private static void GetAllList(CarManager carManager)
         {
-            foreach (var car in carManager.GetAll())
+            foreach (var car in carManager.GetCarDetails())
             {
-                Console.WriteLine("Id: {0} => Açıklama: {1} Günlük Fiyat: {2}", car.Id, car.Description, car.DailyPrice);
+                Console.WriteLine("Marka: {0}  Renk:{1}  Günlük Fiyat: {2} Açıklama:  {3}",car.BrandName,car.ColorName,car.DailyPrice,car.CarName);
             }
         }
 

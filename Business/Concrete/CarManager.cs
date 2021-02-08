@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
-    public class CarManager:ICarService
+    public class CarManager : ICarService
     {
         private ICarDal _carDal;
 
@@ -28,7 +29,7 @@ namespace Business.Concrete
 
         public void Add(Car car)
         {
-            if (car.DailyPrice>0)
+            if (car.DailyPrice > 0)
             {
                 _carDal.Add(car);
             }
@@ -40,7 +41,7 @@ namespace Business.Concrete
 
         public void Update(Car car)
         {
-            
+
             if (car != null)
             {
                 _carDal.Update(car);
@@ -53,7 +54,7 @@ namespace Business.Concrete
 
         public void Delete(Car car)
         {
-            if (car!=null)
+            if (car != null)
             {
                 _carDal.Delete(car);
             }
@@ -65,7 +66,9 @@ namespace Business.Concrete
 
         public List<Car> GetCarsByBrandId(int brandId)
         {
-            return _carDal.GetAll() == null ? throw new Exception("Listete hiç bu markadan araç yok ") : _carDal.GetAll(c => c.BrandId == brandId);
+            return _carDal.GetAll() == null
+                ? throw new Exception("Listete hiç bu markadan araç yok ")
+                : _carDal.GetAll(c => c.BrandId == brandId);
         }
 
         public List<Car> GetCarsByColorId(int colorId)
@@ -73,6 +76,16 @@ namespace Business.Concrete
             return _carDal.GetAll() == null
                 ? throw new Exception("Bu renk ait hiç araç yok")
                 : _carDal.GetAll(c => c.ColorId == colorId);
+        }
+
+        public List<CarDetailDto> GetCarDetails()
+        {
+            return _carDal.GetCarDetails();
+        }
+
+        public Car GetById(int id)
+        {
+            return _carDal.Get(c => c.Id == id);
         }
     }
 }

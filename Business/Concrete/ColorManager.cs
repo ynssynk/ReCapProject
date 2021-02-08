@@ -20,6 +20,11 @@ namespace Business.Concrete
             return _colorDal.GetAll();
         }
 
+        public Color GetById(int id)
+        {
+            return _colorDal.Get(c => c.Id == id);
+        }
+
         public void Add(Color color)
         {
             if (color.Name.Length>=2)
@@ -30,6 +35,16 @@ namespace Business.Concrete
             {
                 throw new Exception("Yeterli değer girilmedi");
             }
+        }
+
+        public void Update(Color color)
+        {
+            _colorDal.Update(color);
+        }
+
+        public void Delete(Color color)
+        {
+            _colorDal.Update(color);
         }
     }
 }
