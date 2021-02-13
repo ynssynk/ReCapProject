@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -16,76 +18,78 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
         }
 
-        public Car Get()
+        public IDataResult<Car> Get(int carId)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
 
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0)
+            if (car.DailyPrice<0)
             {
-                _carDal.Add(car);
+                return new ErrorResult(Messages.ArgumentNull);
             }
-            else
-            {
-                throw new NullReferenceException("Yanlış değer girdiniz");
-            }
+            _carDal.Add(car);
+            return new SuccessResult(Messages.CarAdded);
         }
 
-        public void Update(Car car)
+        public IResult Update(Car car)
         {
 
             if (car != null)
             {
                 _carDal.Update(car);
+                return new SuccessResult(Messages.CarUpdated);
             }
-            else
-            {
-                throw new Exception("Hata!!");
-            }
+
+            return new ErrorResult(Messages.ArgumentNull);
         }
 
-        public void Delete(Car car)
+        public IResult Delete(Car car)
         {
             if (car != null)
             {
                 _carDal.Delete(car);
+                return new SuccessResult(Messages.CarDeleted);
             }
-            else
+
+            return new ErrorResult(Messages.ArgumentNull);
+        }
+
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+        {
+            if (_carDal.GetAll()==null)
             {
-                throw new Exception("Ters giden bir şeyler var !!! Tekrar kontrol et");
+                return new ErrorDataResult<List<Car>>(Messages.ArgumentNull);
             }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == brandId));
         }
 
-        public List<Car> GetCarsByBrandId(int brandId)
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return _carDal.GetAll() == null
-                ? throw new Exception("Listete hiç bu markadan araç yok ")
-                : _carDal.GetAll(c => c.BrandId == brandId);
+            if (_carDal.GetAll()==null)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.ArgumentNull);
+            }
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
         }
 
-        public List<Car> GetCarsByColorId(int colorId)
+        public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return _carDal.GetAll() == null
-                ? throw new Exception("Bu renk ait hiç araç yok")
-                : _carDal.GetAll(c => c.ColorId == colorId);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
 
-        public List<CarDetailDto> GetCarDetails()
+        public IDataResult<Car> GetById(int id)
         {
-            return _carDal.GetCarDetails();
-        }
-
-        public Car GetById(int id)
-        {
-            return _carDal.Get(c => c.Id == id);
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id));
         }
     }
 }

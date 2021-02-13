@@ -14,25 +14,13 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            Car car1 = new Car
-            {
-                BrandId = 1,ColorId = 3,DailyPrice = 150,Description = "En uygun fiyat araçlar bizde",ModelYear = 2020
-            };
-            //Brand brand1 = new Brand {Id = 1002,Name = "Fiat"};
-            Color color1 = new Color {Name = "Mavi"};
+           
             CarManager carManager = new CarManager(new EfCarDal());
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            //brandManager.Update(brand1);
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            colorManager.Add(color1);
+
             GetAllList(carManager);
-            Console.WriteLine("*****Markalar****");
-            GetAllBrands(brandManager);
-            Console.WriteLine("****Renkler*****");
-            GetAllColors(colorManager);
-            
 
         }
+
 
         private static void GetAllColors(ColorManager colorManager)
         {
@@ -51,24 +39,51 @@ namespace ConsoleUI
         }
         private static void GetAllList(CarManager carManager)
         {
-            foreach (var car in carManager.GetCarDetails())
+            
+            var result = carManager.GetCarDetails();
+            if (result.Success)
             {
-                Console.WriteLine("Marka: {0}  Renk:{1}  Günlük Fiyat: {2} Açıklama:  {3}",car.BrandName,car.ColorName,car.DailyPrice,car.CarName);
+                foreach (var car in carManager.GetCarDetails().Data)
+                {
+                    Console.WriteLine("Marka: {0}  Renk:{1}  Günlük Fiyat: {2} Açıklama:  {3}",car.BrandName,car.ColorName,car.DailyPrice,car.CarName);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
             }
         }
 
         private static void GetCarsBrandId(CarManager carManager)
         {
-            foreach (var car in carManager.GetCarsByColorId(1))
+
+            var result = carManager.GetCarsByColorId(1);
+            if (result.Success)
             {
-                Console.WriteLine("Id: {0} => Açıklama: {1} Günlük Fiyat: {2}", car.Id, car.Description, car.DailyPrice);
+                foreach (var car in result.Data)
+                {
+                    Console.WriteLine("Id: {0} => Açıklama: {1} Günlük Fiyat: {2}", car.Id, car.Description, car.DailyPrice);
+                }
             }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+            
         }
         private static void GetCarsColordId(CarManager carManager)
         {
-            foreach (var car in carManager.GetCarsByColorId(2))
+            var result = carManager.GetCarsByColorId(2);
+            if (result.Success)
             {
-                Console.WriteLine("Id: {0} => Açıklama: {1} Günlük Fiyat: {2}", car.Id, car.Description, car.DailyPrice);
+                foreach (var car in result.Data)
+                {
+                    Console.WriteLine("Id: {0} => Açıklama: {1} Günlük Fiyat: {2}", car.Id, car.Description, car.DailyPrice);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
             }
         }
     }
