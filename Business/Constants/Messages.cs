@@ -13,5 +13,6 @@
         public static string ErrorAdded = "Ekleme işlemi başarılı değil";
         public static string Success = "Yapılan işlem başarılı";
         public static string Error = "Yapılan işlem başarısız";
+        public static string CarAlreadyExists = "Araç zaten şu anda kiralık";
     }
 }
