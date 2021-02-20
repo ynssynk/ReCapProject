@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -10,6 +12,7 @@ using Entities.DTOs;
 
 namespace Business.Concrete
 {
+    [ValidationAspect(typeof(RentalValidator))]
     public class RentalManager:IRentalService
     {
         private IRentalDal _rentalDal;

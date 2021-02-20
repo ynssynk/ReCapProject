@@ -13,6 +13,7 @@ using FluentValidation.Results;
 
 namespace Business.Concrete
 {
+    [ValidationAspect(typeof(BrandValidator))]
     public class BrandManager:IBrandService
     {
         private IBrandDal _brandDal;
