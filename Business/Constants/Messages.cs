@@ -14,5 +14,6 @@
         public static string Success = "Yapılan işlem başarılı";
         public static string Error = "Yapılan işlem başarısız";
         public static string CarAlreadyExists = "Araç zaten şu anda kiralık";
+        public static string CarImagesCountLimit = "Bir araça en fazla 5 resim yüklenebilir.";
     }
 }
