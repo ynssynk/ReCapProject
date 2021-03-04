@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Business.Concrete;
+using Core.Entities.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -15,30 +16,30 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
 
-            CarManager carManager = new CarManager(new EfCarDal());
-            User user1 = new User
-            {
-                FirstName = "Yunus",
-                LastName = "Yanık",
-                Email = "ynssynk@gmail.com",
-                Password = "12345"
-            };
-            UserManager userManager = new UserManager(new EfUserDal());
-            var result= userManager.Add(user1).Message;
-            //Customer customer = new Customer { UserId = 1, CompanyName = "Kodlama.io" };
-            //CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
-            Console.WriteLine(result);
-            //customerManager.Add(customer);
-            //var result = customerManager.GetAll();
+            //CarManager carManager = new CarManager(new EfCarDal());
+            //User user1 = new User
+            //{
+            //    FirstName = "Yunus",
+            //    LastName = "Yanık",
+            //    Email = "ynssynk@gmail.com",
+            //    Password = "12345"
+            //};
+            //UserManager userManager = new UserManager(new EfUserDal());
+            //var result= userManager.Add(user1).Message;
+            ////Customer customer = new Customer { UserId = 1, CompanyName = "Kodlama.io" };
+            ////CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            //Console.WriteLine(result);
+            ////customerManager.Add(customer);
+            ////var result = customerManager.GetAll();
 
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
-            //rentalManager.Add(new Rental {CarId = 1, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = null});
+            //RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            ////rentalManager.Add(new Rental {CarId = 1, CustomerId = 1, RentDate = DateTime.Now, ReturnDate = null});
 
 
-            foreach (var rental in rentalManager.GetRentalDetails().Data)
-            {
-                Console.WriteLine("Id:{0} Car:{1} FirstName:{2} LastName:{3} CompanyName:{4} Kiralama Tarihi:{5} Teslim tarihi:{6}", rental.RentalId, rental.CarName, rental.FirtsName, rental.LastName, rental.CompanyName, rental.RentDate, rental.ReturnDate);
-            }
+            //foreach (var rental in rentalManager.GetRentalDetails().Data)
+            //{
+            //    Console.WriteLine("Id:{0} Car:{1} FirstName:{2} LastName:{3} CompanyName:{4} Kiralama Tarihi:{5} Teslim tarihi:{6}", rental.RentalId, rental.CarName, rental.FirtsName, rental.LastName, rental.CompanyName, rental.RentDate, rental.ReturnDate);
+            //}
 
 
 
