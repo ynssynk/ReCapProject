@@ -22,7 +22,7 @@ namespace Business.Concrete
             _rentalDal = rentalDal;
         }
 
-        public IDataResult<List<Rental>> GetAll(Expression<Func<Rental, bool>> filter = null)
+        public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }

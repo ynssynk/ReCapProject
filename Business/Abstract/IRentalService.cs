@@ -9,7 +9,7 @@ namespace Business.Abstract
 {
     public interface IRentalService
     {
-        IDataResult<List<Rental>> GetAll(Expression<Func<Rental, bool>> filter = null);
+        IDataResult<List<Rental>> GetAll();
         IDataResult<List<RentalDetailDto>> GetRentalDetails(); 
         IDataResult<Rental> Get(int id);
         IResult Add(Rental rental);

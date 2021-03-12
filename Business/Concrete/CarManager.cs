@@ -85,7 +85,7 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
         }
-        [SecuredOperation("car.getcardetail,admin")]
+        //[SecuredOperation("car.getcardetail,admin")]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());

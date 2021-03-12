@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -19,7 +20,7 @@ namespace Business.Concrete
         {
             _colorDal = colorDal;
         }
-
+        [CacheAspect()]
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll());

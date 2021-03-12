@@ -6,6 +6,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -27,6 +28,12 @@ namespace Business.Concrete
         public IDataResult<Customer> Get(int customerId)
         {
             return new SuccessDataResult<Customer>(_customerDal.Get(c => c.Id == customerId));
+        }
+
+        public IDataResult<List<CustomerDetailDto>> GetCustomerDetails()
+        {
+            var result = _customerDal.GetCustomerDetails();
+            return new SuccessDataResult<List<CustomerDetailDto>>(_customerDal.GetCustomerDetails());
         }
 
         public IResult Add(Customer customer)

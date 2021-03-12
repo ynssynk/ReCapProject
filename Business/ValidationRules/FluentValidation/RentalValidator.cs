@@ -10,7 +10,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(r => r.CarId).NotNull();
             RuleFor(r => r.CustomerId).NotNull();
             RuleFor(r => r.RentDate).NotNull();
-            RuleFor(r => r.ReturnDate).Null();
+            
         }
     }
 }

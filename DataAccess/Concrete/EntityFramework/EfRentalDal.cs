@@ -26,7 +26,7 @@ namespace DataAccess.Concrete.EntityFramework
                         CarName = brand.Name,
                         DailyPrice = car.DailyPrice,
                         CompanyName = customer.CompanyName,
-                        FirtsName = user.FirstName,
+                        FirstName = user.FirstName,
                         LastName = user.LastName,
                         RentDate = rental.RentDate,
                         ReturnDate = rental.ReturnDate

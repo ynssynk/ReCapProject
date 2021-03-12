@@ -25,8 +25,8 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        [CacheAspect()]
-        [PerformanceAspect(1)]
+        [CacheAspect(10)]
+        [PerformanceAspect(2)]
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
