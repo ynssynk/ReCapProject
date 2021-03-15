@@ -15,7 +15,7 @@ using FluentValidation.Results;
 
 namespace Business.Concrete
 {
-    [ValidationAspect(typeof(BrandValidator))]
+    
     public class BrandManager:IBrandService
     {
         private IBrandDal _brandDal;
@@ -31,12 +31,12 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
         }
-
+        [CacheAspect()]
         public IDataResult<Brand> GetById(int id)
         {
             return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == id));
         }
-        
+        [CacheRemoveAspect("IBrandService.Get")]
         [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
@@ -45,13 +45,15 @@ namespace Business.Concrete
             _brandDal.Add(brand);
             return new SuccessResult(Messages.SuccessAdded);
         }
-
+        [CacheRemoveAspect("IBrandService.Get")]
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);
             return new SuccessResult(Messages.Success);
         }
-
+        [CacheRemoveAspect("IBrandService.Get")]
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);

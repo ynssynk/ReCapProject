@@ -2,9 +2,9 @@
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 
-namespace Business.Storages
+namespace Business.FileManager
 {
-    public interface IStorage
+    public interface IFileManager
     {
         IDataResult<CarImage> UploadImage(IFormFile file, CarImage carImage);
         IDataResult<CarImage> UpdateImage(IFormFile file, CarImage carImage);

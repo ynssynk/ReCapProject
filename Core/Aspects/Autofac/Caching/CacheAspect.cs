@@ -12,7 +12,7 @@ namespace Core.Aspects.Autofac.Caching
         private int _duration;
         private ICacheManager _cacheManager;
 
-        public CacheAspect(int duration=5)
+        public CacheAspect(int duration=15)
         {
             _duration = duration;
             _cacheManager = ServiceTool.ServiceProvider.GetService<ICacheManager>();

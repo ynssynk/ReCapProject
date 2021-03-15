@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -12,8 +13,8 @@ using Entities.DTOs;
 
 namespace Business.Concrete
 {
-    [ValidationAspect(typeof(RentalValidator))]
-    public class RentalManager:IRentalService
+
+    public class RentalManager : IRentalService
     {
         private IRentalDal _rentalDal;
 
@@ -26,7 +27,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
-
+        [CacheAspect()]
         public IDataResult<List<RentalDetailDto>> GetRentalDetails()
         {
             return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
@@ -36,23 +37,23 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == id));
         }
-
+        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
-            if (rental.ReturnDate==null && _rentalDal.GetRentalDetails(r=>r.CarId==rental.CarId).Count>0)
-            {
-                return new ErrorResult(Messages.CarAlreadyExists);
-            }
+
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.Success);
         }
-
+        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Update(Rental rental)
         {
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.Success);
         }
-
+        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);

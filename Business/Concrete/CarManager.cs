@@ -4,7 +4,9 @@ using Business.Abstract;
 using Business.BusinessAspects;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -12,7 +14,7 @@ using Entities.DTOs;
 
 namespace Business.Concrete
 {
-    [ValidationAspect(typeof(CarValidator))]
+    
     public class CarManager : ICarService
     {
         private ICarDal _carDal;
@@ -21,79 +23,77 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
-
+        [CacheAspect()]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll());
         }
-
+        [CacheAspect()]
         public IDataResult<Car> Get(int carId)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == carId));
         }
-
-
+        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.DailyPrice<0)
+
+            var result = BusinessRules.Run(CheckDailyPrice(car.DailyPrice));
+            if (result != null)
             {
-                return new ErrorResult(Messages.ArgumentNull);
+                return result;
             }
+
             _carDal.Add(car);
             return new SuccessResult(Messages.CarAdded);
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
 
-            if (car != null)
-            {
-                _carDal.Update(car);
-                return new SuccessResult(Messages.CarUpdated);
-            }
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
 
-            return new ErrorResult(Messages.ArgumentNull);
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Delete(Car car)
         {
-            if (car != null)
-            {
-                _carDal.Delete(car);
-                return new SuccessResult(Messages.CarDeleted);
-            }
-
-            return new ErrorResult(Messages.ArgumentNull);
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleted);
         }
-
+        [CacheAspect()]
         public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
         {
-            if (_carDal.GetAll()==null)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.ArgumentNull);
-            }
-
+            
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == brandId));
         }
-
+        [CacheAspect()]
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            if (_carDal.GetAll()==null)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.ArgumentNull);
-            }
-
+            
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId));
         }
         //[SecuredOperation("car.getcardetail,admin")]
+        [CacheAspect()]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails());
         }
-
+        [CacheAspect()]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id));
+        }
+        private IResult CheckDailyPrice(decimal dailyPrice)
+        {
+            if (dailyPrice < 0)
+            {
+                return new ErrorResult(Messages.Error);
+            }
+
+            return new SuccessResult(Messages.Success);
         }
     }
 }
