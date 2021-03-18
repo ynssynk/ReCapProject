@@ -42,6 +42,7 @@ namespace Business.Concrete
             return new SuccessDataResult<CarImage>(result);
         }
         [CacheRemoveAspect("ICarImageService.Get")]
+        [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(IFormFile file,  CarImage carImage)
         {
              
@@ -57,6 +58,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.Success);
         }
         [CacheRemoveAspect("ICarImageService.Get")]
+        [ValidationAspect(typeof(CarImageValidator))]
         public IResult Update(IFormFile file,CarImage carImage)
         {
             var result = BusinessRules.Run(CheckIfFileIsEmpty(file),CheckIfExtensionsAreAllowed(file));
@@ -66,6 +68,7 @@ namespace Business.Concrete
             }
 
             var existingPath = _carImageDal.Get(c => c.Id == carImage.Id);
+            existingPath.CarId = carImage.CarId;
             var resultImage= _fileManager.UpdateImage(file, existingPath);
             _carImageDal.Update(resultImage.Data);
              return new SuccessResult(Messages.Success);
@@ -80,15 +83,15 @@ namespace Business.Concrete
             _carImageDal.Delete(resultImage.Data);
             return new SuccessResult(Messages.Success);
         }
-        [CacheAspect()]
-        public IDataResult<List<CarImage>> GetImagesByCarId(int id)
+        //[CacheAspect()]
+        public IDataResult<List<CarImage>> GetImagesByCarId(int carId)
         {
-            var result = BusinessRules.Run(CheckIfCarImageNull(id));
+            var result = BusinessRules.Run(CheckIfCarImageNull(carId));
             if (result!=null)
             {
                 return new ErrorDataResult<List<CarImage>>(result.Message);
             }
-            return new SuccessDataResult<List<CarImage>>(CheckIfCarImageNull(id).Data);
+            return new SuccessDataResult<List<CarImage>>(CheckIfCarImageNull(carId).Data);
         }
         private IResult CheckIfFileIsEmpty(IFormFile file)
         {
@@ -119,17 +122,18 @@ namespace Business.Concrete
             return new ErrorResult();
         }
 
-        private IDataResult<List<CarImage>> CheckIfCarImageNull(int id)
+        private IDataResult<List<CarImage>> CheckIfCarImageNull(int carId)
         {
             string defaultPath = Environment.CurrentDirectory + @"\wwwroot\images\default.png";
-            var result = _carImageDal.GetAll(c => c.CarId == id).Any();
+            var result = _carImageDal.GetAll(c => c.CarId == carId).Any();
             if (!result)
             {
                 var carImages = new List<CarImage>();
-                carImages.Add(new CarImage{CarId = id,ImagePath = defaultPath,Date = DateTime.Now});
+                carImages.Add(new CarImage{CarId = carId,ImagePath = defaultPath,Date = DateTime.Now});
                 return new SuccessDataResult<List<CarImage>>(carImages);
             }
-            return new ErrorDataResult<List<CarImage>>(Messages.Error);
+
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(c => c.CarId == carId));
         }
 
     }
