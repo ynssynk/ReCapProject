@@ -12,30 +12,37 @@ namespace Core.Utilities.Helpers
 
         public static string Create(IFormFile file)
         {
-            var fullPath = FullPath(file);
+            var imagePath = GetImagePath(file);
+            var fullPath = GetFullPath(file,imagePath);
             file.Create(fullPath);
-            return fullPath;
+            return imagePath;
         }
 
         public static string Update(IFormFile file, string existingPath)
         {
             File.Delete(existingPath);
-            var fullPath = FullPath(file);
+            var imagePath = GetImagePath(file);
+            var fullPath = GetFullPath(file,imagePath);
             file.Create(fullPath);
-            return fullPath;
+            return imagePath;
         }
 
-        public static void Delete(string path)
+        public static void Delete(string extingPath)
         {
-            File.Delete(path);
+            File.Delete(extingPath);
         }
 
-        private static string FullPath(IFormFile file)
+        private static string GetFullPath(IFormFile file,string imagePathGuid)
         {
             var path = Environment.CurrentDirectory+ @"\wwwroot\images";
-            var imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
-            var fullPath = Path.Combine(path, imagePath);
+            var fullPath = Path.Combine(path, imagePathGuid);
             return fullPath;
+        }
+
+        private static string GetImagePath(IFormFile file)
+        {
+            var imagePath = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            return imagePath;
         }
     }
 }

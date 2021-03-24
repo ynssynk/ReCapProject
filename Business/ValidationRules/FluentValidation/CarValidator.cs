@@ -12,7 +12,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(c => c.ColorId).NotNull();
             RuleFor(c => c.Description).NotEmpty();
             RuleFor(c => c.Name).NotEmpty();
-            RuleFor(c => c.ModelYear).LessThan(1900);
+            RuleFor(c => c.ModelYear).GreaterThan(1900);
         }
     }
 }

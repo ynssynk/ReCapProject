@@ -4,6 +4,7 @@ using System.Linq;
 using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Castle.Core.Internal;
 using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
@@ -128,18 +129,23 @@ namespace Business.Concrete
         }
         private IDataResult<List<CarDetailDto>> CheckIfImageIsEmpty(List<CarDetailDto> carDetailDtos)
         {
+            
             var result = carDetailDtos;
             foreach (var carDetailDto in result)
             {
-                if (carDetailDto.ImagePath == null)
+                if (carDetailDto.ImagePath.IsNullOrEmpty())
                 {
                     var resultCarImage = _carImageService.GetImagesByCarId(carDetailDto.Id);
                     var carImages = resultCarImage.Data;
                     foreach (var carImage in carImages)
                     {
                         carDetailDto.Id = carImage.CarId;
-                        carDetailDto.ImagePath = carImage.ImagePath;
+                        var imagePathList = new List<string>();
+                        carImage.ImagePath = carImage.ImagePath.Split(new string[] {"\\"},StringSplitOptions.None).LastOrDefault();
+                        imagePathList.Add(carImage.ImagePath);
+                        carDetailDto.ImagePath = imagePathList;
                     }
+
                 }
             }
             return new SuccessDataResult<List<CarDetailDto>>(result);

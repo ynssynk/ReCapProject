@@ -2,8 +2,7 @@
 using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
-using Business.FileManager;
-using Business.Storages;
+
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
@@ -25,7 +24,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<RentalManager>().As<IRentalService>();
             builder.RegisterType<CarImageManager>().As<ICarImageService>();
 
-            builder.RegisterType<LocalFileManager>().As<IFileManager>();
+          
             //Dal
             builder.RegisterType<EfCarDal>().As<ICarDal>();
             builder.RegisterType<EfBrandDal>().As<IBrandDal>();
